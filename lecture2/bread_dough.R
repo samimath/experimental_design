@@ -7,3 +7,7 @@ fac <- sample(f, 12)
 eu <- 1:12
 plan <- data.frame(loaf = eu, time = fac)
 write.csv(plan, file  = './data/Plan.csv', row.names = FALSE)
+#add a column to record height
+plan$Height <-NA
+#view plan
+View(plan)

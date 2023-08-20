@@ -5,6 +5,11 @@ tomato <-read.csv('data/tomato_yield.csv',header = T)
 ggplot(data = tomato)+
   geom_point(aes(x = row,y=yield,col=treatment),size=4)+
   theme_light()
+# boxplot
+ggplot(data = tomato)+
+  geom_boxplot(aes(x = row,y=yield,fill=treatment),size=1)+
+  theme_light()
+
 # summarize mean
 tomato%>%group_by(treatment)%>%
   summarise(avg = mean(yield),std = sd(yield),count = n())

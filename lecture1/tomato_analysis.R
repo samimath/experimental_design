@@ -7,4 +7,26 @@ ggplot(data = tomato)+
   theme_light()
 # summarize mean
 tomato%>%group_by(treatment)%>%
-  summarise(avg = mean(yield),std = sqrt(var(yield)),count = n())
+  summarise(avg = mean(yield),std = sd(yield),count = n())
+# separate data from each group
+a <- tomato$yield[tomato$treatment=='A']
+b <- tomato$yield[tomato$treatment=='B']
+# simple two-sample t-test:
+t.val<-t.test(yield ~ treatment, data = tomato,var.equal=TRUE)
+
+# verify 
+Na<- length(a)
+Nb <-length(b)
+# degrees of freedom
+df<- Na+Nb-2
+# sample standard dev
+Sa <- sum((a-mean(a))^2)/(Na-1)
+Sb <- sum((b-mean(b))^2)/(Nb-1)
+# pooled standard dev (when we assume equal variance)
+sp <- sqrt(((Na-1)*Sa + (Nb-1)*Sb)/df)
+# putting it together
+t.val2 <- (mean(a)-mean(b))/(sp*(sqrt(1/Na+1/Nb)))
+
+print(t.val)
+print(t.val$statistic - t.val2)
+

@@ -11,3 +11,11 @@ write.csv(plan, file  = './data/Plan.csv', row.names = FALSE)
 plan$Height <-NA
 #view plan
 View(plan)
+
+
+### 
+
+## plot F distribution with 2 (t-1) and 9 (n-t) deg. of freedom:
+
+x <- seq(from = 0,to =5,by = 0.01)
+plot(x,df(x,df1 = 2,df2 = 9), type = 'l')x

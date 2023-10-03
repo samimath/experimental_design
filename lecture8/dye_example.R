@@ -17,6 +17,9 @@ dye$batch <- as.factor(batch)
 
 mod1 <-aov(yield~batch, data = dye)
 
+
+
+
 ## Methods of moment estimates for \sigma_t
 s1 <-summary(mod1)
 ms_batch <- s1[[1]][1,3] # set equal to theoretical moment sigma_t+5*sigma2

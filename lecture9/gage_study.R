@@ -13,9 +13,13 @@ modr3 <- lmer(y ~ 1 + (1|part) +
               data = gagerr, REML = FALSE)
 summary(modr3)
 
+mod4 <- aov( y ~ 1 + part +oper+ part:oper, data = gagerr)
+
 ## calculate confidence interval using the vci function
 
 ## delta = linear combination of two mean square error c1ms1 - c2ms2
 vci(confl = .90, c1 = .05, ms1 = .01485, 
     nu1 = 2, c2 = .05,
     ms2 = .02689, nu2 = 18)
+
+

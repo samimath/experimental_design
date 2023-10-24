@@ -5,6 +5,7 @@ culture <- FrF2( nruns = 16, nfactors = 8,
                  generators = c("BCD", "ACD", "ABC","ABD"), 
                  randomize = FALSE)
 # check confounding patterns
+y<-1:16
 aliases( lm (y~(.)^4, 
              data = culture))
 y1 <- c(5.75, 6.7, 11.12, 10.67, 4.92, 5.35, 2.81, 10.83,
@@ -43,7 +44,7 @@ aliases( lm (y~(.)^4,
 ## half normal plot of the effects
 daewr::halfnorm(effects = modf2$effects[2:16],
                 labs = labels(modf2),
-                refline = FALSE,alpha = 0.25)
+                refline = FALSE,alpha = 0.05)
 
 ## interaction plot
 
@@ -52,3 +53,13 @@ with(culture2, (interaction.plot( E,C, y, type = "b",
                               main = "Interaction Plot of Urea and Ammonium Sulfate",
                               xlab = "Ammonium Sulfate", ylab = "Biomass")))
 
+## inspect design matrix for the assumed model
+X<-cbind(model_matrix_full$X.Intercept,# overall effect
+                            model_matrix_full$D1,# block effect
+                            model_matrix_full$A1,# factor A
+                            model_matrix_full$B1,# factor B
+                            model_matrix_full$G1, # factor F (shifted to G due to block effect taking spot for'D')
+                            model_matrix_full$A1.D1, # factor AD
+                            model_matrix_full$C1.G1) # factor CF
+
+solve(t(X)%*%X)

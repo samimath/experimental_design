@@ -6,6 +6,11 @@ library(DoE.base)
 design <- FrF2(nruns = 8, nfactors = 6, 
                generators = c('AB','AC','BC'),randomize = FALSE)
 print(design)
+
+## define a 6-factor eigth factorial design in standard order:
+design2 <- FrF2(nruns = 8, nfactors = 6, 
+               generators = c('-AB','-AC','-BC'),randomize = FALSE)
+print(design2)
 ## generate alias / confounding patterns
 ## place holder response vector of the same dimension as the runs 
 ## (it can be anything)
@@ -74,4 +79,26 @@ aliases(lm(y~(.)^5, data = des2))
 
 generators(des1)
 
+des_test <- FrF2( nruns = 8,  
+                  nfactors = 7, 
+                  generator = c('AB','AC','BC','ABC'))
+y <- runif( 8, 0, 1 )
+aliases(lm(y~(.)^3, data = des_test))
 
+des_test2<- fold.design(des_test, columns = c(5,6,7))
+y <- runif( 16, 0, 1 )
+aliases(lm(y~(.)^4, data = des_test2))
+
+des_test3<- fold.design(des_test, columns = 'full')
+des_test3
+y <- runif( 16, 0, 1 )
+aliases(lm(y~(.)^4, data = des_test3))
+
+
+
+
+des_test <- FrF2( nruns = 8,  
+                  nfactors = 5, 
+                  generator = c('AB','AC'))
+y <- runif( 8, 0, 1 )
+aliases(lm(y~(.)^3, data = des_test))

@@ -24,6 +24,8 @@ ggplot(data)+geom_boxplot(aes(x=group,y=distance.x, fill= group))+ggtitle('fligh
 ## are there maker bias?
 ggplot(data)+geom_boxplot(aes(x=plane.maker,y=distance.y, fill= plane.maker))+
   ggtitle('flight distance across makers')
+ggplot(data)+geom_boxplot(aes(x=plane.maker,y=distance.x, fill= plane.maker))+
+  ggtitle('flight distance (x) across makers')
 ## run the model with only flight tester (nested) as the random effect, and plane type as fixed effect 
 
 mod1 <- lmer(distance.y~1+plane.type+(1|group:flight.tester) , 

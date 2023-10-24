@@ -1,0 +1,70 @@
+---
+title: "Math 420 HW 2"
+subtitle: "Fall 2023"
+author: "Washington University in St. Louis"
+date: "Due date: Saturday, 10/28/2023"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+require('daewr')
+require('ggplot2')
+require('pander')
+require('lme4')
+```
+
+## Instruction:
+
+Please type your answers clearly and show your work neatly. You are encouraged to use the Rmarkdown version of this assignment as a template to submit your work. Unless stated otherwise, all programming references in the assignment will be in R. For this assignment, problems roughly covers content from Fractional Factorial Designs (Ch. 6 of the text)
+
+
+### Problem 1 (3 points)
+Create a $2^{7-3}$ design using `FrF2` with generators $E = ABC, F = ABD, G = ACD$
+
+(a) Determine the defining relation for this design. Show your work.
+
+(b) Determine the confounded strings of two-factor interactions that can be estimated from this design.
+
+(c) Suppose that after the analysis of data from this experiment, the significant effects appear to be $B$, $BC +AE +FG$, and $BE +AC +DG$. What foldover fraction would you recommend in order to determine which specific interactions are causing the two strings of confounded interactions to appear significant?
+
+(d) List the experiments in the foldover fraction you recommend in part (c).
+
+
+
+### Problem 2 (3 points)
+6. Consider the experiment to study factors that affect the percent removal of arsenic from drinking water using a iron coated sand filter.
+
+(a) Modify the R code in Section 6.5.1 to produce the design shown in Table 6.8.
+(b) Determine the defining relation for the experiments in the first block and show the confounding of main effects with strings of two-factor interactions.
+(c) Calculate the effects and make a half-normal plot of them using only the data from block 1 in Table 6.8.
+(d) Determine the defining relation for the combined experiments.
+(e) Calculate the effects, including the block effect, and make a half-normal plot of them using all the data in Table 6.8. What interactions are confounded with the block effect?
+
+
+### Problem 3 (4 points)
+
+8. Prince (2007) performed a 25-2 fractional factorial in the process of optimizing a clinical assay to detect Streptococcus pyogenes with real-time PCR. Optimization of this process would allow hospitals to detect Strep infections in less than 30 minutes with $99%$ accuracy. The factors he studied were: 
+A=Number of S. pyogenes colonies (1 or 4), 
+B=Boiling time (1 min. or 3 min.), 
+C=Centrifuge time (0 min. or 2 min.), 
+D=cycling temperature (60 or 61), 
+E=Cycling time (5/10 sec. or 8/13 sec.). 
+
+The generators for the design were $D=AC$ and $E=BC$.
+
+(a) The response data (in standard order) from the eight experiments were: 1.31091, 1.43201, 1.29951, 1.37199, 1.33566, 1.46820, 1.39023, 1.41531. Calculate the effects and make a half-normal plot of the effects. Identify any effects you believe may be significant.
+
+(b) Determine the confounding pattern or alias structure for the design.
+
+(c) What are the aliases of the largest effect in absolute value?
+
+(d) Prince performed eight more experiments according to a foldover (similar to that shown in Table 6.8) and the resulting data were: 1.31702, 1.38881, 1.32222, 1.36248, 1.33826, 1.32654, 1.32654, 1.34635. Combining this data with the data from the original 8 runs, calculate the 15 effects including a block effect for the differences in the two groups of experiments.
+
+(e) What is the defining relationship and alias structure for the complete set of 16 experiments?
+
+(f) Make a half-normal plot of the 15 effects and determine what appears to be significant from the combined set of data.
+
+(g) Provide an interpretation for all effects and interactions you determine are significant, and discuss how the conclusions and interpretation after 16 experiments differs from what could have been concluded after the first 8 experiments.
+

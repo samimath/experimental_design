@@ -7,6 +7,7 @@ library(AlgDesign)
 des_test <- FrF2( nruns = 8,  
                   nfactors = 7, 
                   generator = c('AB','AC','BC','ABC'))
+
 y <- runif( 8, 0, 1 )
 aliases(lm(y~(.)^3, data = des_test))
 ## foldover design
@@ -17,6 +18,20 @@ y<-c(69.95,58.65,56.25,53.25,
         16.20,52.85,9.05,31.10,
         7.40,9.90,10.85,48.75)
 add.response(des_fold, y)
+
+## creating a dataframe with a different format
+des_fold2 <- data.frame(des_fold)[,c('fold','A','B','C','D','E','F','G')]
+# add observation vector to the data frame
+des_fold2[,'y']<-y
+## reorganize the data frame and create a new columns called 'block' based on the values from 'fold, 
+## here the function 'ifelse()' is used to create the new column, where des_fold2$fold=='original' is the logic, 
+## and 1 is the value when the logic is true,  2 is the value when the logic is false
+des_fold2[,'block']<-ifelse(des_fold2$fold=='original',1,2)
+## we can also create a new column called 'run' to contain the run numbers 
+des_fold2[,'run'] <- 1:16
+## finalize the data frame to select only the needed columns
+des_fold2 <- des_fold2[,c('run','block','A','B','C','D','E','F','G','y')]
+
 model_fold<-lm(y~(.)^2, data = des_fold)
 ## get design matrix
 model_matrix_full<-data.frame(model.matrix(model_fold))

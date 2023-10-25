@@ -99,6 +99,9 @@ aliases(lm(y~(.)^4, data = des_test3))
 
 des_test <- FrF2( nruns = 8,  
                   nfactors = 5, 
-                  generator = c('AB','AC'))
+                  generator = c('AB','BC'))
 y <- runif( 8, 0, 1 )
+aliases(lm(y~(.)^6, data = des_test))
+aliases(lm(y~(.)^5, data = des_test))
 aliases(lm(y~(.)^3, data = des_test))
+aliases(lm(y~(.)^2, data = des_test))

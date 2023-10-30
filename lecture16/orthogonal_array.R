@@ -34,6 +34,9 @@ X <-as.matrix(data.frame(model.matrix(mod_test)))
 XtX <-round(t(X)%*%X,0)
 
 ## product research example
+test <- oa.design(nlevels = c(3,3, 2,2,4),
+                        randomize = FALSE, 
+                        columns = 'min3',seed = 2013)
 
 cand_chair <- oa.design(nlevels = c(4, 4, 3, 2),
                         randomize = FALSE, 

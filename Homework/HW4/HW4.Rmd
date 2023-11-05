@@ -1,0 +1,70 @@
+---
+title: "Math 420 HW 4"
+subtitle: "Fall 2023"
+author: "Washington University in St. Louis"
+date: "Due date: Saturday, 11/18/2023"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+require('daewr')
+require('ggplot2')
+require('pander')
+require('lme4')
+```
+
+## Instruction:
+
+Please type your answers clearly and show your work neatly. You are encouraged to use the Rmarkdown version of this assignment as a template to submit your work. Unless stated otherwise, all programming references in the assignment will be in R. For this assignment, problems roughly covers content from Split-plot Designs (Ch. 8 of the text) and a little bit of response surface methodology.
+
+### Problem 1
+
+(a) Describe an example of split-plot design from a topic you are familiar with. Explain the process and relevant factors as well as their levels. 
+
+(b) Write the mathematical formula for the example from (a)
+
+
+
+### Problem 2 
+
+Modify the R code in Section 8.2.1 to create
+
+(a) A randomized list for a split-plot experiment with completely randomized whole plots where there is one whole-plot factor A with 3 levels and two replicate whole plots for each level, and one split-plot factor B with three levels. Label the levels with `c(1,2,3)` rather than `c=("low","mid","high")` as shown in Section 8.2.1.
+
+(b) Write the model for the design you created in (a).
+
+(c) Create a randomized list for a split-plot experiment with completely randomized whole plots where there are two whole-plot factors A and B each with two levels and two replicate whole plots per treatment combination and two split-plot treatments C and D each with three levels.
+
+(d) Write the model for the design you created in (c).
+
+### Problem 3 
+
+Modify the R code using the `FrF2` function in Section 8.3.2 (for creating the design for the sausage-casing experiment with two whole-plot factors, two blocks of whole plots, and two split-plot factors) to create a design with two whole-plot factors, two blocks of whole plots, and three split-plot factors. Each factor has only two levels.
+
+### Problem 4
+
+
+Kuehl (2000) reports the results of an experiment conducted at a large seafood company to investigate the effect of storage temperature and type of seafood upon bacterial growth on oysters and mussels. Three storage temperatures were studied (0C, 5C, and 10C). Three cold storage units were randomly assigned to be operated at each temperature. Within each storage unit, oysters and mussels were randomly assigned to be stored on one of the two shelves. The seafood was stored for 2 weeks at the assigned temperature, and at the end of the time the bacterial count was obtained from a sample on each shelf. The resulting data (log bacterial count) is shown in p.345 of the book.
+
+(a) What is the experimental unit for temperature?
+(b) Why was it necessary to include nine storage units instead of three?
+(c) What is the experimental unit for seafood type? 
+(d) Write the model for the data.
+(e) Analyze the data to determine what temperature and type of seafood have significant effects.
+(f) Interpret any significant effects.
+(g) Check the assumptions of the model you used for analysis.
+
+### Problem 5
+
+Create a central composite design for two factors using the `rsm` package.
+
+(a) Create the uniform precision CCD and store the design along with random numbers (simulated response) in a data frame.
+
+(b) Use the `Vdgraph` package to make a variance dispersion graph or a fraction of design space plot of the design you created.
+
+(c) Repeat (a) through (b) for a face-centered cube design (i.e., CCD with axial points at $\pm1$).
+
+(d) Based on the graphs you made, which design do you prefer? State the reason.
+

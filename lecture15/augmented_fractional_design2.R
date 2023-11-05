@@ -32,6 +32,43 @@ des_fold2[,'run'] <- 1:16
 ## finalize the data frame to select only the needed columns
 des_fold2 <- des_fold2[,c('run','block','A','B','C','D','E','F','G','y')]
 
+
+## function to find defining relation 
+
+make_temp_data<- function(data, factors){
+  temp_data<-data
+  def_array<-list()
+  print(head(temp_data))
+  for(c in factors){
+    print(c)
+    temp_data[,c]<-as.numeric(paste(data[,c]))
+  }
+  return(temp_data[,factors])
+}
+
+
+factors = c('A','B','C','D','E','F','G')
+def_array<-list()
+for(i in 1:length(factors)){
+  def_array[[i]]<-combn(x=factors,i)
+  }
+  
+  
+def_relation <- function(data, factors){
+  temp_data<-make_temp_data(data=data,factors = factors)
+  def_array<-list()
+  for(i in 1:length(factors)){
+    def_array[[i]]<-combn(x=factors,i)
+    for(j in 1:length(def_array[[i]])){
+      check_vec<-apply(temp_data[,def_array[[i]][,j]],1,prod)
+      if(sum(check_vec)==length(check_vec)){
+        print(def_array[i][,j])
+      }
+    }
+    
+  }
+}
+
 model_fold<-lm(y~(.)^2, data = des_fold)
 ## get design matrix
 model_matrix_full<-data.frame(model.matrix(model_fold))
@@ -93,3 +130,23 @@ optim <- optFederov( frml = ~ A + B + F + I(A*D) + I(C*F), ## model using variab
 newruns <- optim$design[ 17:24, ]
 newruns
 
+
+temp_data <- make_temp_data(data= des_fold2,factors=c('A','B','C','D','E','F','G'))
+comb5<-combn(x = c('A','B','C','D','E','F','G'), m = 5)
+comb4<-combn(x = c('A','B','C','D','E','F','G'), m = 4)
+comb3<-combn(x = c('A','B','C','D','E','F','G'), m = 3)
+comb2<-combn(x = c('A','B','C','D','E','F','G'), m = 2)
+for(i in 1:ncol(comb5)){
+  check_vec <- apply(temp_data[,comb5[,i]],1,prod)
+  if(sum(check_vec)==length(check_vec)){
+    print(comb5[,i])
+  }
+}
+
+
+comb_vec <-combn(c('A','B','C','D','E'),4)
+
+for(i in 1:ncol(comb_vec)){
+  check_vec <- apply(des3temp[,comb_vec[,i]],1,prod)
+  if(sum(check_vec)==length(check_vec)){print(comb_vec[,i])}
+  }

@@ -2,11 +2,19 @@ library(FrF2)
 library(AlgDesign)
 library(daewr)
 library(lme4)
-## create design with 32 subplot, 8 whole-plots and 2 wholeplot factors
-design <-FrF2(32, 4, WPs = 8, nfac.WP = 2, factor.names = (c("A", "B","C", "D")))
+library(ggplot2)
+## create design with 32 subplot, 
+## 8 whole-plots and 2 wholeplot factors
+design <-FrF2(32, 4, 
+              WPs = 8, 
+              nfac.WP = 2, 
+              factor.names = (c("A", "B","C", "D")))
 
+## visualize the data:
+ggplot(sausage)+geom_boxplot(aes(x=A,y=ys,fill=B))+facet_grid(C~D,labeller = label_both)+theme_bw()
 ## implementing the model
-rmod2 <- lmer( ys ~ A*B*C*D  +(1|Block) + (1|A:B:Block), data = sausage)
+rmod2 <- lmer( ys ~ A*B*C*D  +(1|Block) + 
+                 (1|A:B:Block), data = sausage)
 ## ANOVA:
 anova(rmod2)
 ## effect summary

@@ -1,5 +1,5 @@
 ---
-title: "Math 420 HW 2"
+title: "Math 420 HW 3 solution"
 subtitle: "Fall 2023"
 author: "Washington University in St. Louis"
 date: "Due date: Saturday, 10/28/2023"
@@ -8,11 +8,9 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
 require('daewr')
-require('ggplot2')
-require('pander')
 require('lme4')
+require('FrF2')
 ```
 
 ## Instruction:
@@ -25,18 +23,74 @@ Create a $2^{7-3}$ design using `FrF2` with generators $E = ABC, F = ABD, G = AC
 
 (a) Determine the defining relation for this design. Show your work.
 
+Defining relation is the set of columns that are held constant ($I$). We can identify them starting with the generators:
+$E=ABC \implies I = ABCE$
+
+$F=ABD \implies I = ABDF$
+
+$G=ACD \implies I = ACDG$
+
+On the other hand, $I^2 = I,$ and this results in :
+
+$(ABCE)(ACDF) \implies I = BEDF$
+
+$(ABCE)(ACDG) \implies I = BCDG$
+
+$(ABCE)(ABDF) \implies I = CEDF$
+
+$(ABDF)(ACDG) \implies I = BCFG$
+
+Therefore, the defining relation is the set  $I = ABCE = ABDF = ACDG = BEDF = BCDG = CEDF = BCFG$. It is a resolution IV design as the smallest number of word has length 4.
+
 (b) Determine the confounded strings of two-factor interactions that can be estimated from this design.
+
+This can be done using the `aliases` and the `FrF2` package 
+
+```{r}
+## set up the fractional design
+des1b <- FrF2(nruns = 16, nfactors = 7, generators = c('ABC','ABD','ACD'))
+## (.)^2 tells the function to return 2-factor interactions
+aliases(lm(1:16~(.)^2, data = des1b))
+
+```
 
 (c) Suppose that after the analysis of data from this experiment, the significant effects appear to be $B$, $BC +AE +FG$, and $BE +AC +DG$. What foldover fraction would you recommend in order to determine which specific interactions are causing the two strings of confounded interactions to appear significant?
 
+We can create a foldover design by switching the signs of generators that contain factor $B$, this would clear the effects for B and break the confounding strings of $BE$ and $BC.$
+
+
+
 (d) List the experiments in the foldover fraction you recommend in part (c).
 
+```{r}
+## set up the fractional design
+des1c <- fold.design(design = des1b, columns = c(2))
+des1c
 
+```
 
 ### Problem 2 (3 points)
 6. Consider the experiment to study factors that affect the percent removal of arsenic from drinking water using a iron coated sand filter.
 
 (a) Modify the R code in Section 6.5.1 to produce the design shown in Table 6.8.
+
+```{r}
+## original design
+des2a <- FrF2(nruns = 8, nfactors = 7, 
+              generators = c("AB","AC","BC","ABC"),
+              randomize = FALSE)
+## foldover design
+des2a_fold <- fold.design(des2a, columns = 'full')
+## convert it into a dataframe for easier manipulation
+des2a_fold <- data.frame(des2a_fold)[,c('fold','A','B','C','D','E','F','G')]
+## rename 'origina'/'mirror' as a 'block' variable
+des2a_fold[,'block']<-ifelse(des2a_fold$fold=='original',1,2)
+des2a_fold[,'run'] <- 1:16
+des2a_fold[,'y']<-c(69.95,58.65,56.25,53.25,
+        94.40,73.45,10.00,2.11,
+        16.20,52.85,9.05,31.10,
+        7.40,9.90,10.85,48.75)
+```
 (b) Determine the defining relation for the experiments in the first block and show the confounding of main effects with strings of two-factor interactions.
 (c) Calculate the effects and make a half-normal plot of them using only the data from block 1 in Table 6.8.
 (d) Determine the defining relation for the combined experiments.

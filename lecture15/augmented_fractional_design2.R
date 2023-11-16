@@ -33,41 +33,7 @@ des_fold2[,'run'] <- 1:16
 des_fold2 <- des_fold2[,c('run','block','A','B','C','D','E','F','G','y')]
 
 
-## function to find defining relation 
 
-make_temp_data<- function(data, factors){
-  temp_data<-data
-  def_array<-list()
-  print(head(temp_data))
-  for(c in factors){
-    print(c)
-    temp_data[,c]<-as.numeric(paste(data[,c]))
-  }
-  return(temp_data[,factors])
-}
-
-
-factors = c('A','B','C','D','E','F','G')
-def_array<-list()
-for(i in 1:length(factors)){
-  def_array[[i]]<-combn(x=factors,i)
-  }
-  
-  
-def_relation <- function(data, factors){
-  temp_data<-make_temp_data(data=data,factors = factors)
-  def_array<-list()
-  for(i in 1:length(factors)){
-    def_array[[i]]<-combn(x=factors,i)
-    for(j in 1:length(def_array[[i]])){
-      check_vec<-apply(temp_data[,def_array[[i]][,j]],1,prod)
-      if(sum(check_vec)==length(check_vec)){
-        print(def_array[i][,j])
-      }
-    }
-    
-  }
-}
 
 model_fold<-lm(y~(.)^2, data = des_fold)
 ## get design matrix

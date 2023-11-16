@@ -148,7 +148,7 @@ Consider an experimental situation where the investigator was interested in dete
 
 We only need to modify the value of $\Delta$ and `nlev` in this case, assuming $\sigma^2$ given in the book example stays the same. Below is the result. 
 
-```{r}
+```{r,echo=FALSE}
 rmin <- 2
 rmax <- 10
 alpha <-rep(0.05, rmax - rmin +1)
@@ -158,6 +158,7 @@ nlev <- 4
 nreps <- rmin:rmax
 power <- Fpower1(alpha, nlev, nreps, Delta, sigma)
 pander(power)
+print(power)
 
 ```
 

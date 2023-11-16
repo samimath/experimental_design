@@ -1,7 +1,6 @@
 ## cement example
 library(daewr)
 library(rsm)
-library(plot3D)
 ## load data
 cement<-daewr::cement
 ## let's take a view of the data
@@ -21,7 +20,7 @@ mod_rsm2 <- rsm(y ~ FO(x1,x2,x3) + ## FO = First Order
 mod_rsm3 <- rsm(y ~ FO(x1,x2,x3) + ## FO = First Order
                   PQ(x1,x2,x3), ## PQ = Pure quadratic
                 data = cement)
-
+summary(mod_rsm3)
 ## Contour plot:
 
 ## since this contains 3 factors, let's look at 2 factors at a time:

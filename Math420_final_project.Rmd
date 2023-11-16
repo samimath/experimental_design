@@ -1,0 +1,55 @@
+---
+title: "Math 420 Final Project"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Objective 
+
+The objective of this assignment is for you to apply the concepts of experimental designs to a real-life problem. You will be responsible for designing, conducting, and analyzing an experiment of your choice.
+
+### Guideline
+
+*Choose a problem or question that can be addressed with an experiment* This should be something relatively easy to implement, feel free to review our course textbook for ideas.
+
+*Identify the factors, experimental units and response variables in your experiment* Factors could be random or fixed based on the purpose of your experiments. Experimental units can be homogeneous or heterogeneous as long as your design accounts for that.
+
+*Choose an appropriate experimental design* Some design ideas are: completely randomized designs, factorial designs, fractional factorial designs, nested designs, split-plot designs,variance component analysis etc.
+
+*Develop a detailed experimental design plan* The plan should include the following information:
+
+- A description of the factors, experimental units and the response variables you are measuring
+- The levels of each factor
+- The number of replicates for each treatment
+- The method of assigning treatments to experimental units
+- The method of collecting data
+
+*Conduct your experiment* Follow your design plan to conduct the experiments and collect the data
+
+
+*Provide detailed data modeling and analysis* Use appropriate statistical methods to analyze your data and draw conclusions about your experiment. This may include ANOVA ,t-tests, interaction plots and other visualization tools.
+
+*Articulate results and conclusions* Conclude your analysis based on the data collected, share learnings, conclusions and next steps. Cite any references used.
+
+
+
+## Timeline 
+
+The following are the key due dates for the project:
+
+- **December 2, 2023** : Outline of final project (will be part of HW 5)
+
+- **December 19, 2023**: Write-up of final project 
+
+## Collaboration
+
+You may choose to do your project individually, or form a team of up to three people. In the case of a group project, please note that a cover page of division of responsibilities will be needed, and 5 points of your final assignment will be assessed by your fellow team mates. 
+
+## Writing and communication guidelines
+
+Please keep your project write-up as concise as possible.Check the structure of your work to make sure it is coherent, include any exhibitions to facilitate your ideas, and cite all sources properly. 
+

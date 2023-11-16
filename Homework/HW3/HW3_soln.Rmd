@@ -249,7 +249,7 @@ aliases(mod3d)
 
 (f) Make a half-normal plot of the 15 effects and determine what appears to be significant from the combined set of data.
 
-Skip grading this - this seems to be the same ask as part (d)
+ungraded - this is similar to d
 
 (g) Provide an interpretation for all effects and interactions you determine are significant, and discuss how the conclusions and interpretation after 16 experiments differs from what could have been concluded after the first 8 experiments.
 

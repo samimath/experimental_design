@@ -3,6 +3,7 @@ library(daewr)
 library(AlgDesign)
 library(GAD)
 library(ggplot2)
+library(lme4)
 library(VCA) ## package to check whether a design is balanced or not 
 
 ## create subplots

@@ -1,0 +1,277 @@
+---
+title: "Math 420 HW 4 solution"
+subtitle: "Fall 2023"
+author: "Washington University in St. Louis"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+require('daewr')
+require('ggplot2')
+require('pander')
+library('lmerTest')
+library('AlgDesign')
+library('FrF2')
+library('rsm')
+library('Vdgraph')
+
+```
+
+## Instruction:
+
+Please type your answers clearly and show your work neatly. You are encouraged to use the Rmarkdown version of this assignment as a template to submit your work. Unless stated otherwise, all programming references in the assignment will be in R. For this assignment, problems roughly covers content from Split-plot Designs (Ch. 8 of the text) and a little bit of response surface methodology.
+
+### Problem 1
+
+(a) Describe an example of split-plot design from a topic you are familiar with. Explain the process and relevant factors as well as their levels. 
+
+(b) Write the mathematical formula for the example from (a)
+
+
+
+### Problem 2 
+
+Modify the R code in Section 8.2.1 to create
+
+(a) A randomized list for a split-plot experiment with completely randomized whole plots where there is one whole-plot factor A with 3 levels and two replicate whole plots for each level, and one split-plot factor B with three levels. Label the levels with `c(1,2,3)` rather than `c=("low","mid","high")` as shown in Section 8.2.1.
+
+This design has two factors - A(whole-plot) and B(subplot). If we want to have two replicates for each factor-level combination, the full factorial design would have needed $2\times3^2 = 18$ separate sample. In this split-plot design, we can use 6 samples to achieve the same number of runs, by splitting each whole-plot into 3 randomized levels. Below is the code to build the design:
+
+```{r}
+wp <- expand.grid(A = c(1,2,3),stringsAsFactors = T)
+sp <- expand.grid(B = c(1,2,3),stringsAsFactors = T)
+
+#two replicates for the whole-plot levels
+wp <- rbind(wp, wp)
+## set up model design using optBlock.
+## There are a total of 6 whole-plot blocks, each has 3 levels of subplot factor
+splitP <- optBlock( ~ A * B, withinData= sp,
+blocksizes = rep(3,6), wholeBlockData = wp)
+## original design
+print(splitP$Blocks)
+```
+
+
+In here, we can create additional steps to randomize the runs, using a 2-step randomization scheme. Step 1: randomize whole plots and step 2: within each whole-plot, randomize the sub-plots:
+
+```{r}
+## randomizing the plots -- in two stages
+split_df<-data.frame(splitP$design)
+## stage 1: randomize the whole plot
+split_df[,'block']<-floor(as.numeric(row.names(split_df)))
+rand_block<-sample(1:6,6,replace = FALSE)
+split_df1<-data.frame()
+for(i in rand_block){
+  split_df2<-split_df[split_df$block==i,]
+  ## stage 2: randomzie the subpplot levels within each whole plot
+  split_df2$B<-sample(1:3,3,replace = FALSE)
+  split_df1<-rbind(split_df2,split_df1)
+}
+
+```
+
+The result is as follows:
+
+```{r}
+
+print(split_df1)
+
+```
+
+(b) Write the model for the design you created in (a).
+
+The model can be represented as follows:
+
+$y_{ijk} = \mu + \alpha_i + w_{(i)j} + \beta_k + \alpha\beta_{ik} + \epsilon_{ijk}$
+
+where:
+- $\mu$ is the overall effect
+- $\alpha_i$ is the fixed effect for factor A level $i$
+- $w_{(i)j}$ is the random effect for whole-plot $j$ assigned to level $i$ of factor A
+- $\beta_k$ is the fixed effect for factor B level $k$
+- $\alpha\beta_{ik}$ is the interaction effect for A and B, at the sub-plot level
+- $\epsilon_{ijk}$ is the model error
+
+(c) Create a randomized list for a split-plot experiment with completely randomized whole plots where there are two whole-plot factors A and B each with two levels and two replicate whole plots per treatment combination and two split-plot treatments C and D each with three levels.
+
+
+```{r}
+wp <- expand.grid(A = c(1,2),B = c(1,2),stringsAsFactors = T)
+sp <- expand.grid(C = c(1,2,3),D = c(1,2,3),stringsAsFactors = T)
+
+#two replicates for the whole-plot levels
+wp <- rbind(wp, wp)
+## set up model design using optBlock: 
+## there are a total of 8 whole-plots for A+B, 
+## each with 9 factor-level combinations for C+D.
+splitP_1c <- optBlock( ~ (A + B)*(C+D+C:D), withinData= sp,
+blocksizes = rep(9,8), wholeBlockData = wp)
+
+
+```
+
+
+(d) Write the model for the design you created in (c).
+
+The model can be represented as (note that some of the higher order interaction terms can be omitted if not significant) :
+
+$y_{ijklm} = \mu +b_i +\alpha_j +\beta_k$
+$+\alpha\beta_{jk} +w_{(ij)k}$
+
+$+\gamma_l +\delta_m +\gamma\delta_{lm} +\alpha\gamma_{jl} +\alpha\delta{jm}$
+
+$+\beta\gamma_{kl} + \beta\delta_{km}+\alpha\beta\gamma_{jkl} +\alpha\beta\delta_{jkm}$
+
+$\alpha\gamma_{jkl} + \beta\gamma\delta_{klm}+\alpha\beta\gamma\delta_{jklm}+\epsilon_{ijklm}$
+
+### Problem 3 
+
+Modify the R code using the `FrF2` function in Section 8.3.2 (for creating the design for the sausage-casing experiment with two whole-plot factors, two blocks of whole plots, and two split-plot factors) to create a design with two whole-plot factors, two blocks of whole plots, and three split-plot factors. Each factor has only two levels.
+
+In this problem, there are a total of 5 factors and $2\times 32$ runs (since there are 2 blocks). Since each whole-plot factor has 2 levels, and 2 blocks, in total we have 8 whole-plots. We can use the following R code to create the design:
+
+```{r}
+
+des_3 <-FrF2(nruns = 32,
+             nfactors = 5,
+             WPs = 8,
+             nfac.WP = 2,
+             factor.names = c('A','B','C','D','E'))
+```
+### Problem 4
+
+Kuehl (2000) reports the results of an experiment conducted at a large seafood company to investigate the effect of storage temperature and type of seafood upon bacterial growth on oysters and mussels. Three storage temperatures were studied (0C, 5C, and 10C). Three cold storage units were randomly assigned to be operated at each temperature. Within each storage unit, oysters and mussels were randomly assigned to be stored on one of the two shelves. The seafood was stored for 2 weeks at the assigned temperature, and at the end of the time the bacterial count was obtained from a sample on each shelf. The resulting data (log bacterial count) is shown in p.345 of the book.
+
+(a) What is the experimental unit for temperature?
+
+The experimental unit for temperature is a storage unit for the seafood.
+
+(b) Why was it necessary to include nine storage units instead of three?
+
+Using nine storage units allow for randomization and replicates of the treatment-level combinations, so that we can better address the variability of the effects with the experiment results.
+
+(c) What is the experimental unit for seafood type? 
+
+The experimental unit for seafood type is the small shelf in the fridge where each different seafood type is placed
+
+(d) Write the model for the data.
+
+This experiment has one whole-plot factor (temperature, $\alpha$) and one sub-plot factor (seafood type, $\beta$) with $w$ representing the random effects of the whole-plot. The model can be represented mathematically as $y_{ijk} = \mu + \alpha_i + w_{(i)j} + \beta_k + \alpha\beta_{ik} + \epsilon_{ijk}$
+
+(e) Analyze the data to determine what temperature and type of seafood have significant effects.
+
+First let's create the dataset given by the book:
+
+```{r}
+unit <- rep(seq(1, 9), each = 2)
+temp <- rep(c('0','5','10'), each = 6)
+type <-rep(c('Oysters', 'Mussels'),9)
+y = c(3.6882,0.3565,1.8275,1.7023,5.2327,4.578,7.195,5.0169,9.3224,
+7.9519,7.4195,6.3861,9.7842,10.1352,6.4703,5.0482,9.4442,11.0329)
+seafood_data <- data.frame(unit=unit,temp=temp, type = type, y = y)
+
+```
+
+We can also visualize the data to get a feel of what the result looks like for different factor-level combination
+
+Below is a view in each storage unit :
+
+```{r}
+
+ggplot(seafood_data)+geom_point(aes(x=type,y=y,col=as.factor(as.numeric(temp))))+facet_wrap(~unit,ncol=3)+theme_bw()+ggtitle('Bacteria count vs seafood type by temperature and unit')
+```
+
+And this is a view of overall bacteria count vs temperature, grouped by seafood type. There seems to be a pretty clear visual trend of temperature effect on bacteria growth, regardless of seafood type. 
+
+```{r}
+
+ggplot(seafood_data)+geom_boxplot(aes(x=as.factor(as.numeric(temp)),y=y,col=type))+theme_bw()+ggtitle('Bacteria count vs seafood type by temperature and unit')
+
+```
+
+
+Now, we can `lmer()` function to fit the model represented in d) to get a better view of the effects 
+
+```{r}
+
+lme_sf <- lmerTest::lmer(y~temp*type+ (1|unit)+ (1|temp:unit), 
+               data = seafood_data)
+
+```
+
+
+(f) Interpret any significant effects.
+
+It does appear that the main significant effects are coming from temperature changes - for instance, storing the seafood at 5C and 10C both result in signficantly higher bacterial growth, regardless of seafood type and their interaction
+
+```{r}
+summary(lme_sf)
+
+
+```
+
+
+
+(g) Check the assumptions of the model you used for analysis.
+
+We can use quantile-quantile plot to check for the normality of the model residul - it appears to follow the distribution fairly well.
+
+
+```{r}
+
+qqplot(sort(resid(lme_sf)),sort(rnorm(nrow(seafood_data),0,1)))
+```
+
+We can also plot the model residual directly to check for the constant variance assumption, which seems to be the case:
+
+```{r}
+
+plot(lme_sf)
+```
+
+
+### Problem 5
+
+Create a central composite design for two factors using the `rsm` package.
+
+(a) Create the uniform precision CCD and store the design along with random numbers (simulated response) in a data frame.
+
+This can be done using the following code (also shown in lecture19):
+
+```{r}
+rotd <- ccd(basis = 2, # number of factors
+            alpha = "rotatable", #settings for the design
+            randomize = FALSE)
+## combine with simulated response (uniform distribution)
+rotdm <- cbind(rotd[ , 3:4],runif(nrow(rotd)))
+
+```
+
+(b) Use the `Vdgraph` package to make a variance dispersion graph or a fraction of design space plot of the design you created.
+
+```{r}
+Vdgraph(rotdm)
+
+```
+
+(c) Repeat (a) through (b) for a face-centered cube design (i.e., CCD with axial points at $\pm1$).
+
+
+```{r}
+
+faced <- ccd(basis = 2, # number of factors
+            alpha = "faces", #settings for the design
+            randomize = FALSE)
+
+##taking just the coded factor levels
+facedm<- cbind(faced[ , 3:4],runif(nrow(faced)))
+## distribution of variance
+Vdgraph(faced[ , 3:4])
+```
+
+(d) Based on the graphs you made, which design do you prefer? State the reason.
+
+The face-centered design is preferred as the range of the variance for the second design appears to be narrower compared to the CCD in part a). This means that the responses collected at these design point should theoretically have more consistent values as well. 
+

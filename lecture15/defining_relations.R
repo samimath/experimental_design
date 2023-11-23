@@ -35,8 +35,8 @@ def_relation <- function(data, factors){
 
 ### example
 
-des <- FrF2( nruns = 8,  
-                  nfactors = 7, 
-                  generator = c('AB','AC','BC','ABC'))
+des<- FrF2(nruns = 8,nfactors = 7,
+                    factor.names = c('A','B','C','D','E','F','G'), 
+                    generators = c('AB','AC','BC','ABC'))
 
 def_relation(data=data.frame(des),factors =c('A','B','C','D','E','F','G'))

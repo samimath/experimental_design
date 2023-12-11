@@ -1,6 +1,5 @@
 ## power calculation for two-factor factorial experiment
 
-
 library(daewr)
 library(ggplot2)
 
@@ -8,9 +7,9 @@ library(ggplot2)
 
 rmin <- 2 # smallest number of replicates
 rmax <- 8 # largest number of replicates
-sigma <- .32
+sigma <- .29
 alpha <- .05
-Delta <- 1
+Delta <- 0.5
 nlev <- 16
 nreps <- c(rmin:rmax)
 power <- data.frame(Fpower1(alpha, nlev, nreps, Delta, sigma))
@@ -23,9 +22,9 @@ plot(power$nreps,power$power,'b',xlab = 'nreps',ylab = 'power',main='Power vs # 
 rmin <- 2 # smallest number of replicates
 rmax <- 10 # largest number of replicates
 alpha <- .05
-sigma <- 3.2
-Delta <- 4.0
-nlev <- c(4,4)
+sigma <- 0.2
+Delta <- 0.5
+nlev <- c(2,2)
 nreps <- c(rmin:rmax)
 result <- Fpower2(alpha, nlev, nreps, Delta, sigma)
 options(digits = 5)

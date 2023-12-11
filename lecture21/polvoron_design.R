@@ -5,7 +5,7 @@ library(mixexp)
 des<-Xvert(nfac = 3, # number of mixture components
            uc=c(.8,.95,.50), #upperbound of the components
            lc=c(0,.10,.05), # lowerbound of the components
-           ndm=1,# number edge centroids to include in desin
+           ndm=1,# number edge centroids to include in design
            plot=TRUE)
 
 ## create a D-optimal design with a subset of runs (as an example)
